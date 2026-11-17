@@ -240,7 +240,7 @@ export const refunds = sqliteTable(
       .notNull()
       .$type<RefundStatus>()
       .default(RefundStatus.Requested),
-    // The learner's own words, in the box on the course page.
+    // The buyer's own words, from the refund request form.
     reason: text("reason").notNull(),
     // Null until someone approves — a declined request refunds nothing.
     amountRefunded: integer("amount_refunded"),
@@ -288,6 +288,9 @@ export const coupons = sqliteTable("coupons", {
     .references(() => purchases.id),
   redeemedByUserId: integer("redeemed_by_user_id").references(() => users.id),
   redeemedAt: text("redeemed_at"),
+  // Set when the team licence this seat came from is refunded. A voided seat
+  // can never be claimed.
+  voidedAt: text("voided_at"),
   createdAt: text("created_at")
     .notNull()
     .$defaultFn(() => new Date().toISOString()),
